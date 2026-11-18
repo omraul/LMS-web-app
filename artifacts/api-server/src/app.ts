@@ -45,12 +45,14 @@ const apiLimiter = rateLimit({
 });
 // Tighter ceiling on the expensive, paid-API / heavy-compute write paths
 // (AI grading + O(n^2) similarity on submissions/quiz attempts).
+// Raised to 120/min per IP so a college computer lab / campus WiFi sharing a
+// single NAT IPv4 address does not 429 students submitting a quiz simultaneously.
 const writeLimiter = rateLimit({
   windowMs: 60_000,
-  limit: 20,
+  limit: 120,
   standardHeaders: "draft-7",
   legacyHeaders: false,
-  message: { error: "Too many submissions in a short time, please wait." },
+  message: { error: "Too many submissions in a short time, please wait a moment and try again." },
 });
 
 app.use(

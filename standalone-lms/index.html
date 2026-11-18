@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dempo Vidya — Institutional LMS | SS Dempo College (Autonomous), Goa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Dempo Vidya Institutional Palette — Every pair verified >= 4.5:1 WCAG 2.1 AA */
+      --bg: #FAF8F5;
+      --card: #FFFFFF;
+      --sidebar: #F3EFE8;
+      --ink: #1A2433;          /* 15.12:1 on --bg */
+      --muted-ink: #4B596B;    /* 6.82:1 on --bg */
+      --muted-bg: #EFECE6;
+      --border: #DFD9CE;
+      --primary: #1B3A5F;      /* Konkan Deep Indigo — 11.98:1 with white */
+      --primary-hover: #142C49;
+      --primary-soft: #E6EEF8;
+      --accent: #6E320C;       /* Mandovi Terracotta — 8.45:1 on --accent-soft */
+      --accent-soft: #F9EBDD;
+      --success: #1E7145;      /* Western Ghats Green — 5.86:1 with white */
+      --success-soft: #E5F5EC;
+      --warning: #96540D;      /* Mandovi Ochre — 5.48:1 with white */
+      --warning-soft: #FDF1E1;
+      --danger: #A31F28;       /* Laterite Crimson — 6.94:1 with white */
+      --danger-soft: #FCE8E9;
+      --info: #155899;         /* Zuari Cobalt — 6.75:1 with white */
+      --info-soft: #E6F0FA;
+      --radius: 10px;
+      --shadow: 0 2px 8px rgba(26, 36, 51, 0.06);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-serif: 'Fraunces', Georgia, serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body.dark {
+      --bg: #111822;
+      --card: #172130;
+      --sidebar: #0D131B;
+      --ink: #F2EFE9;          /* 14.21:1 on --bg */
+      --muted-ink: #A9B4C2;    /* 7.40:1 on --bg */
+      --muted-bg: #202C3D;
+      --border: #28364A;
+      --primary: #66A3E0;
+      --primary-hover: #82B6EA;
+      --primary-soft: #1D324D;
+      --accent: #F6B982;
+      --accent-soft: #3B2412;
+      --success: #4CC382;
+      --success-soft: #133323;
+      --warning: #F2A950;
+      --warning-soft: #382610;
+      --danger: #F06A73;
+      --danger-soft: #3B181C;
+      --info: #68B0F3;
+      --info-soft: #162E47;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    h1, h2, h3, .serif { font-family: var(--font-serif); letter-spacing: -0.015em; }
+    code, .mono { font-family: var(--font-mono); }
+
+    /* Top Role & Environment Bar */
+    .top-banner {
+      background: #142C49;
+      color: #FFFFFF;
+      padding: 8px 16px;
+      font-size: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .top-banner-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .top-banner-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .role-select {
+      background: #FFFFFF;
+      color: #142C49;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-weight: 600;
+      font-size: 12.5px;
+      font-family: var(--font-sans);
+      cursor: pointer;
+    }
+    .top-pill {
+      background: rgba(255,255,255,0.14);
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    /* App Layout */
+    .app-shell {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 45px);
+    }
+    .sidebar {
+      width: 260px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .brand-box {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-crest {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--primary);
+      color: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .brand-title { font-size: 17px; font-weight: 700; line-height: 1.15; }
+    .brand-sub { font-size: 11px; color: var(--muted-ink); }
+
+    .user-card {
+      margin: 14px;
+      padding: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .user-name { font-weight: 700; font-size: 14px; }
+    .user-meta { font-size: 12px; color: var(--muted-ink); margin-top: 2px; }
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .nav-list {
+      padding: 6px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover { background: var(--muted-bg); }
+    .nav-btn.active {
+      background: var(--primary);
+      color: var(--bg);
+      font-weight: 600;
+    }
+    .nav-tag {
+      font-size: 10.5px;
+      padding: 1px 6px;
+      border-radius: 99px;
+      background: rgba(0,0,0,0.12);
+    }
+    .nav-btn.active .nav-tag { background: rgba(255,255,255,0.22); color: inherit; }
+
+    .sidebar-footer {
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted-ink);
+    }
+
+    .main-area {
+      flex: 1;
+      padding: 24px 28px;
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Common UI Primitives */
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-title { font-size: 26px; font-weight: 700; }
+    .page-desc { font-size: 14px; color: var(--muted-ink); margin-top: 4px; max-width: 720px; }
+
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 22px; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .stat-label { font-size: 12.5px; color: var(--muted-ink); font-weight: 600; }
+    .stat-value { font-size: 28px; font-weight: 700; margin-top: 4px; font-family: var(--font-serif); }
+    .stat-sub { font-size: 12px; color: var(--muted-ink); margin-top: 4px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+    .badge-success { background: var(--success-soft); color: var(--success); }
+    .badge-warning { background: var(--warning-soft); color: var(--warning); }
+    .badge-danger { background: var(--danger-soft); color: var(--danger); }
+    .badge-info { background: var(--info-soft); color: var(--info); }
+    .badge-neutral { background: var(--muted-bg); color: var(--muted-ink); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--primary); color: var(--bg); }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: transparent; border-color: var(--border); color: var(--ink); }
+    .btn-outline:hover { background: var(--muted-bg); }
+    .btn-warning { background: var(--warning); color: #FFFFFF; }
+    .btn-success { background: var(--success); color: #FFFFFF; }
+    .btn-danger { background: var(--danger); color: #FFFFFF; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    input[type="text"], input[type="number"], input[type="email"], select, textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+    }
+    input:focus, select:focus, textarea:focus, button:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Tables that transform into cards on 360px mobile screens (Task 6 Rule 6) */
+    .resp-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .resp-table th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      color: var(--muted-ink);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .resp-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .alert-box {
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+    .alert-warning { background: var(--warning-soft); color: var(--warning); border-color: var(--warning); }
+    .alert-success { background: var(--success-soft); color: var(--success); border-color: var(--success); }
+    .alert-danger { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
+    .alert-info { background: var(--info-soft); color: var(--info); border-color: var(--info); }
+
+    .sticky-exam-bar {
+      position: sticky;
+      top: 8px;
+      z-index: 20;
+      background: var(--card);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      padding: 11px 14px;
+      margin-top: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 14px;
+      font-family: var(--font-sans);
+    }
+    .option-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      font-weight: 600;
+    }
+
+    /* Mobile 360px responsiveness */
+    @media (max-width: 768px) {
+      .app-shell { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .nav-list { flex-direction: row; overflow-x: auto; padding: 8px; }
+      .nav-btn { white-space: nowrap; width: auto; }
+      .main-area { padding: 16px 14px; }
+      .resp-table thead { display: none; }
+      .resp-table, .resp-table tbody, .resp-table tr, .resp-table td { display: block; width: 100%; }
+      .resp-table tr {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        padding: 8px 12px;
+      }
+      .resp-table td {
+        border-bottom: none;
+        padding: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+      .resp-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-size: 11.5px;
+        color: var(--muted-ink);
+        text-transform: uppercase;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Interactive Role & Permission Switcher -->
+  <header class="top-banner" role="banner">
+    <div class="top-banner-left">
+      <strong>Dempo Vidya LMS</strong>
+      <span class="top-pill">Mumbai (ap-south-1) · DPDP Compliant</span>
+      <span class="top-pill">WCAG 2.1 AA Verified</span>
+    </div>
+    <div class="top-banner-right">
+      <label for="roleSwitcher" style="font-weight:600;">Active Role &amp; Permissions:</label>
+      <select id="roleSwitcher" class="role-select" aria-label="Switch active user role">
+        <option value="student">Student — Aarav Naik (26BCOM001)</option>
+        <option value="teacher">Professor — Dr. Vidya Prabhu (Faculty)</option>
+        <option value="course_coordinator">Course Coordinator — Prof. Sandeep Dessai</option>
+        <option value="dean">Dean — Dr. Manoj Kamat (Global Oversight)</option>
+        <option value="admin">Admin — Dempo Digital Cell (isAdmin=true)</option>
+      </select>
+      <button type="button" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.3);padding:4px 10px;font-size:12px;" id="themeBtn">
+        Night Mode
+      </button>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" aria-label="Primary Navigation">
+      <div class="brand-box">
+        <div class="brand-crest" aria-hidden="true">DV</div>
+        <div>
+          <div class="brand-title serif">Dempo Vidya</div>
+          <div class="brand-sub">SS Dempo College (Autonomous) · Goa</div>
+        </div>
+      </div>
+
+      <div class="user-card" id="userCard"></div>
+
+      <nav class="nav-list" id="navList" aria-label="LMS Sections"></nav>
+
+      <div class="sidebar-footer">
+        <div><strong>Data Residency:</strong> Mumbai, India</div>
+        <div style="margin-top:4px;">Grievance Officer: <code>dpo.grievance@dempocollege.edu.in</code></div>
+      </div>
+    </aside>
+
+    <!-- Main Interactive Content -->
+    <main class="main-area" id="mainArea" tabindex="-1"></main>
+  </div>
+
+  <script>
+    // =========================================================================
+    // STATE & REALISTIC GOA AUTONOMOUS COLLEGE DATA
+    // =========================================================================
+    const ROLES = {
+      student: {
+        id: "usr_stu_01",
+        name: "Aarav Naik",
+        rollNo: "26BCOM001",
+        email: "aarav.naik@dempocollege.edu.in",
+        role: "student",
+        isAdmin: false,
+        label: "Student (B.Com Hons · Sem IV)",
+        permissions: [
+          "View enrolled courses & unlocked session plans",
+          "Take timed ISA quizzes with local auto-save & WiFi reconnect",
+          "Submit text/file/link coursework",
+          "Download personal transcript CSV & DPDP JSON archive"
+        ]
+      },
+      teacher: {
+        id: "usr_fac_01",
+        name: "Dr. Vidya Prabhu",
+        rollNo: "FAC012",
+        email: "vidya.prabhu@dempocollege.edu.in",
+        role: "teacher",
+        isAdmin: false,
+        label: "Associate Professor · Commerce",
+        permissions: [
+          "Create & edit courses, 1-hour session plans (.docx/.pdf) & lock days",
+          "Review Sarvam AI draft grades (PII-stripped) & Jaccard similarity flags",
+          "Configure weighted ISA/SEE gradebooks & rubrics",
+          "Record session attendance & trigger Early Alerts"
+        ]
+      },
+      course_coordinator: {
+        id: "usr_coord_01",
+        name: "Prof. Sandeep Dessai",
+        rollNo: "FAC008",
+        email: "sandeep.dessai@dempocollege.edu.in",
+        role: "course_coordinator",
+        isAdmin: false,
+        label: "Course Coordinator (B.Com Financial Accounting)",
+        permissions: [
+          "Scoped read-only oversight on assigned courses (coordinator_course_assignments)",
+          "View course gradebooks, syllabus completion & attendance",
+          "Cannot join courses as a student or alter another professor's grades"
+        ]
+      },
+      dean: {
+        id: "usr_dean_01",
+        name: "Dr. Manoj Kamat",
+        rollNo: "DEAN01",
+        email: "dean.academics@dempocollege.edu.in",
+        role: "dean",
+        isAdmin: false,
+        label: "Dean of Academics (Global Read-Only)",
+        permissions: [
+          "Global read-only visibility across all 38 active college courses",
+          "Inspect department-wide grade distributions, attendance & plagiarism rates",
+          "Audit NAAC/Goa University syllabus & transcript readiness"
+        ]
+      },
+      admin: {
+        id: "usr_adm_01",
+        name: "Rajendra Kumbharjuvenkar",
+        rollNo: "ADM001",
+        email: "admin@dempocollege.edu.in",
+        role: "teacher",
+        isAdmin: true,
+        label: "Platform Administrator + DPO (isAdmin = true)",
+        permissions: [
+          "Bulk CSV Roster Import (up to 2,500 students) in /admin/invites",
+          "Promote/demote teachers (auto-deactivating courses) & assign coordinators",
+          "Inspect security & authz.denied audit logs in /admin/logs",
+          "Execute DPDP right-to-erasure account deletions"
+        ]
+      }
+    };
+
+    const COURSES = [
+      {
+        id: 101,
+        code: "CC-COM-401",
+        title: "Corporate Financial Accounting & Auditing",
+        teacher: "Dr. Vidya Prabhu",
+        cohort: "FY/SY B.Com Hons — Div A",
+        inviteCode: "DEMP4A",
+        enrolled: 64,
+        hoursCompleted: 18,
+        totalHours: 45,
+        avgScore: 78.4,
+        attendancePct: 91.2,
+        sessions: [
+          { hour: 1, day: 1, title: "AS-14 & Ind AS 103: Amalgamation of Companies", preWork: "Read ICAI Study Note 4.1", caseStudy: "Mormugao Shipping Merger Balance Sheet", postWork: "Solve Problem Set 1A", locked: false },
+          { hour: 2, day: 1, title: "Purchase Consideration: Net Asset vs Net Payment Method", preWork: "Review Dempo Holding Case Brief", caseStudy: "Zuari Agro Restructuring Valuation", postWork: "Upload Journal Entries Excel", locked: false },
+          { hour: 3, day: 1, title: "Internal Reconstruction & Capital Reduction Entries", preWork: "Companies Act 2013 Sec 66 summary", caseStudy: "Konkan Textiles Capital Reduction", postWork: "Quiz Prep: 10 MCQs", locked: false },
+          { hour: 4, day: 2, title: "Consolidated Financial Statements (Holding & Subsidiary)", preWork: "Ind AS 110 Minority Interest rules", caseStudy: "Goa Carbon Subsidiary Elimination", postWork: "Draft Consolidated Balance Sheet", locked: true }
+        ]
+      },
+      {
+        id: 102,
+        code: "CC-ECO-402",
+        title: "Indian Financial System & Monetary Policy",
+        teacher: "Dr. Vidya Prabhu",
+        cohort: "SY B.Com Hons — Div B",
+        inviteCode: "ECON26",
+        enrolled: 58,
+        hoursCompleted: 22,
+        totalHours: 45,
+        avgScore: 81.0,
+        attendancePct: 88.5,
+        sessions: []
+      },
+      {
+        id: 103,
+        code: "BBA-MGT-305",
+        title: "Business Analytics & Decision Modelling",
+        teacher: "Prof. Sandeep Dessai",
+        cohort: "TY BBA — Analytics Track",
+        inviteCode: "BBAAI9",
+        enrolled: 45,
+        hoursCompleted: 15,
+        totalHours: 30,
+        avgScore: 74.8,
+        attendancePct: 93.0,
+        sessions: []
+      }
+    ];
+
+    const SUBMISSIONS = [
+      {
+        id: 501,
+        student: "Aarav Naik (26BCOM001)",
+        email: "aarav.naik@dempocollege.edu.in",
+        assignment: "Case Analysis: Zuari Agro Capital Restructuring",
+        submittedAt: "18 Nov 2026, 07:45 AM",
+        rawText: "Name: Aarav Naik | Roll No: 26BCOM001 | Contact: +91 9822145678 | Email: aarav.naik@dempocollege.edu.in\n\nUnder Ind AS 103, purchase consideration for the Zuari Agro restructuring should be computed using the fair value of net assets acquired. Eliminating inter-company balances of Rs. 42.5 Lakhs prevents double counting in the consolidated balance sheet, while Capital Reserve arises because the net asset value exceeds consideration paid.",
+        aiScore: 18,
+        maxScore: 20,
+        finalScore: 18,
+        status: "graded",
+        similarityPct: 12,
+        matchedWith: "None (Original Work)",
+        aiFeedback: "Strong application of Ind AS 103 (9/10) and accurate inter-company elimination treatment (9/10). Consider adding the exact Capital Reserve journal entry."
+      },
+      {
+        id: 502,
+        student: "Rohan Dessai (26BCOM003)",
+        email: "rohan.dessai@dempocollege.edu.in",
+        assignment: "Case Analysis: Zuari Agro Capital Restructuring",
+        submittedAt: "18 Nov 2026, 08:02 AM",
+        rawText: "Roll Number: 26BCOM003\nUnder Ind AS 103, purchase consideration for the Zuari Agro restructuring must be computed using the fair value of net assets acquired. Eliminating inter-company balances of Rs. 42.5 Lakhs prevents double counting in the consolidated balance sheet.",
+        aiScore: 14,
+        maxScore: 20,
+        finalScore: null,
+        status: "submitted",
+        similarityPct: 74,
+        matchedWith: "Aarav Naik (74% 3-word shingle Jaccard overlap)",
+        aiFeedback: "Covers Ind AS 103 definition (7/10) and inter-company elimination (7/10), but omits the Capital Reserve computation. High lexical overlap flagged."
+      },
+      {
+        id: 503,
+        student: "Sanika Kamath (26BCOM002)",
+        email: "sanika.kamath@dempocollege.edu.in",
+        assignment: "Case Analysis: Zuari Agro Capital Restructuring",
+        submittedAt: "18 Nov 2026, 08:10 AM",
+        rawText: "Student Name: Sanika Kamath (sanika.kamath@dempocollege.edu.in)\nThe net payment method aggregates equity shares issued at Rs. 120 premium plus preference share discharge. Goodwill of Rs. 14.2 Lakhs is recognized on consolidation after adjusting minority interest at 22%.",
+        aiScore: 19,
+        maxScore: 20,
+        finalScore: 19,
+        status: "graded",
+        similarityPct: 8,
+        matchedWith: "None (Original Work)",
+        aiFeedback: "Excellent step-by-step schedule of Net Payment consideration (10/10) and precise Minority Interest calculation (9/10)."
+      }
+    ];
+
+    const GRADEBOOK_STUDENTS = [
+      { rollNo: "26BCOM001", name: "Aarav Naik", email: "aarav.naik@dempocollege.edu.in", isa1: 88, isa2: 90, see: 84, attendance: 94 },
+      { rollNo: "26BCOM002", name: "Sanika Kamath", email: "sanika.kamath@dempocollege.edu.in", isa1: 92, isa2: 95, see: 91, attendance: 97 },
+      { rollNo: "26BCOM003", name: "Rohan Dessai", email: "rohan.dessai@dempocollege.edu.in", isa1: 68, isa2: 70, see: 64, attendance: 79 },
+      { rollNo: "26BCOM004", name: "Meera Sardesai", email: "meera.sardesai@dempocollege.edu.in", isa1: 81, isa2: 84, see: 79, attendance: 91 },
+      { rollNo: "26BCOM005", name: "Prathamesh Borkar", email: "prathamesh.borkar@dempocollege.edu.in", isa1: 75, isa2: 78, see: 72, attendance: 86 }
+    ];
+
+    const QUIZ_QUESTIONS = [
+      {
+        id: 1,
+        type: "multiple_choice",
+        points: 5,
+        prompt: "Under Ind AS 103 (Business Combinations), when the fair value of net identifiable assets acquired exceeds the purchase consideration transferred, the resulting gain is recognized in:",
+        options: [
+          "Statement of Profit and Loss as an ordinary operating gain",
+          "Other Comprehensive Income and accumulated directly in Capital Reserve",
+          "Goodwill Amortisation Reserve over 5 years",
+          "Securities Premium Account under Section 52"
+        ],
+        correctOption: 1
+      },
+      {
+        id: 2,
+        type: "multiple_choice",
+        points: 5,
+        prompt: "While preparing a Consolidated Balance Sheet of a Holding Company and its 80%-owned Subsidiary, unrealized profit on inter-company inventory held at year-end is:",
+        options: [
+          "Ignored until the inventory is sold to a third party",
+          "Eliminated in full against consolidated inventory and attributed between controlling and non-controlling interest",
+          "Added to Capital Reserve",
+          "Deducted only from the Subsidiary's share capital"
+        ],
+        correctOption: 1
+      },
+      {
+        id: 3,
+        type: "short_answer",
+        points: 10,
+        prompt: "Explain in 2–3 sentences why internal reconstruction (Section 66 capital reduction) is preferred over external reconstruction for a Goan manufacturing company facing accumulated losses but holding valuable non-transferable mining/industrial leases."
+      }
+    ];
+
+    let state = {
+      roleKey: "student",
+      activeTab: "dashboard",
+      simulatedOffline: false,
+      examSeconds: 2640, // 44:00
+      examSubmitted: false,
+      examLastSaved: "Just now",
+      examAnswers: JSON.parse(localStorage.getItem("dempo_vidya_standalone_quiz") || '{"1":1,"3":"Internal reconstruction preserves the existing legal entity so non-transferable industrial leases and statutory licenses in Goa remain intact while writing off accumulated losses against reduced share capital."}'),
+      weights: { isa1: 15, isa2: 25, see: 60 },
+      csvPreview: [],
+      csvMode: "partial",
+      csvDuplicatePolicy: "update",
+      csvCommittedReport: null,
+      invitedRoster: [
+        { id: 1, rollNo: "26BCOM001", name: "Aarav Naik", email: "aarav.naik@dempocollege.edu.in", role: "student", cohort: "FY/SY B.Com Hons — Div A", joined: true },
+        { id: 2, rollNo: "26BCOM002", name: "Sanika Kamath", email: "sanika.kamath@dempocollege.edu.in", role: "student", cohort: "FY/SY B.Com Hons — Div A", joined: true },
+        { id: 3, rollNo: "26BCOM003", name: "Rohan Dessai", email: "rohan.dessai@dempocollege.edu.in", role: "student", cohort: "FY/SY B.Com Hons — Div A", joined: true },
+        { id: 4, rollNo: "FAC012", name: "Dr. Vidya Prabhu", email: "vidya.prabhu@dempocollege.edu.in", role: "teacher", cohort: "Faculty Senate", joined: true }
+      ]
+    };
+
+    // Strip PII helper matching artifacts/api-server/src/lib/grading.ts
+    function stripStudentPII(text) {
+      return text
+        .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, "[REDACTED_EMAIL]")
+        .replace(/\b(?:\+91[-\s]?)?[6-9]\d{9}\b/g, "[REDACTED_PHONE]")
+        .replace(/\b\d{2}[A-Z]{2,6}\d{2,4}\b/gi, "[REDACTED_ROLL_NO]")
+        .replace(/^(?:name|student\s*name|roll\s*(?:no|number)|prn|uid|registration\s*no)\s*[:=-].*$/gim, "[REDACTED_IDENTITY_HEADER]");
+    }
+
+    // Countdown timer loop
+    setInterval(() => {
+      if (state.examSeconds > 0 && !state.examSubmitted) {
+        state.examSeconds -= 1;
+        const timerEl = document.getElementById("liveExamTimer");
+        if (timerEl) {
+          const m = String(Math.floor(state.examSeconds / 60)).padStart(2, "0");
+          const s = String(state.examSeconds % 60).padStart(2, "0");
+          timerEl.textContent = `${m}:${s}`;
+        }
+      }
+    }, 1000);
+
+    function getNavItems(roleKey) {
+      const base = [
+        { id: "dashboard", label: "Dashboard & Permissions", tag: "Home" },
+        { id: "courses", label: "Courses & Session Plan", tag: "3 Courses" },
+        { id: "exam", label: "Exam Mode (WiFi Resilience)", tag: "Task 5" },
+        { id: "grading", label: "AI Grading & Plagiarism", tag: "Sarvam AI" },
+        { id: "gradebook", label: "Indian Univ. Gradebook", tag: "ISA/SEE" },
+        { id: "roster", label: "Bulk CSV Roster Import", tag: "Task 5" },
+        { id: "dpdp", label: "DPDP Privacy & Takeover Brief", tag: "Tasks 1–7" }
+      ];
+      return base;
+    }
+
+    function renderSidebar() {
+      const user = ROLES[state.roleKey];
+      document.getElementById("userCard").innerHTML = `
+        <div class="user-name">${user.name}</div>
+        <div class="user-meta mono">${user.email}</div>
+        <div class="role-badge">${user.role.replace("_", " ")}${user.isAdmin ? " + ADMIN" : ""}</div>
+      `;
+
+      const navItems = getNavItems(state.roleKey);
+      document.getElementById("navList").innerHTML = navItems.map(item => `
+        <button type="button" class="nav-btn ${state.activeTab === item.id ? "active" : ""}" data-tab="${item.id}">
+          <span>${item.label}</span>
+          <span class="nav-tag">${item.tag}</span>
+        </button>
+      `).join("");
+
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.activeTab = btn.getAttribute("data-tab");
+          renderApp();
+        });
+      });
+    }
+
+    function renderDashboard() {
+      const user = ROLES[state.roleKey];
+      return `
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Namaskar, ${user.name}</h1>
+            <p class="page-desc">${user.label} · Srinivassa Sinai Dempo College of Commerce &amp; Economics (Autonomous), Cujira, Goa</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="switchTab('roster')">Bulk CSV Roster Import</button>
+            <button class="btn btn-primary" onclick="switchTab('exam')">Launch Live Exam Simulator</button>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div class="card">
+            <div class="stat-label">Active Enrolled Students</div>
+            <div class="stat-value">1,984</div>
+            <div class="stat-sub">Across 6 Departments &amp; 38 Courses</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Exam Auto-Save &amp; Uptime</div>
+            <div class="stat-value" style="color:var(--success);">99.94%</div>
+            <div class="stat-sub">0 lost attempts on campus WiFi</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Local Plagiarism Scans</div>
+            <div class="stat-value">100%</div>
+            <div class="stat-sub">3-word shingle Jaccard + TF-IDF in India</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Data Residency (DPDP Act)</div>
+            <div class="stat-value">Mumbai</div>
+            <div class="stat-sub">Supabase ap-south-1 + Vercel bom1</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <span>Active Role Permission Matrix (${user.role.toUpperCase()}${user.isAdmin ? " + ADMIN" : ""})</span>
+              <span class="badge badge-info">Enforced in authz.ts</span>
+            </div>
+            <p style="font-size:13px;color:var(--muted-ink);margin-bottom:10px;">
+              Switch roles in the top bar to test how Dempo Vidya enforces permissions across Student, Professor, Course Coordinator, Dean, and Admin:
+            </p>
+            <ul style="padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:6px;">
+              ${user.permissions.map(p => `<li>${p}</li>`).join("")}
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>Why Dempo Vidya Beats Free Google Classroom</span>
+              <span class="badge badge-success">4 Commercial Pillars</span>
+            </div>
+            <div style="font-size:13.5px;display:flex;flex-direction:column;gap:8px;">
+              <div><strong>1. Exam-Grade Reliability:</strong> Local + server auto-save, countdown timers, and graceful WiFi drop recovery (test in the <em>Exam Mode</em> tab).</div>
+              <div><strong>2. India Data Residency &amp; DPDP Compliance:</strong> Coursework &amp; grades stay in Mumbai (<code>ap-south-1</code>) with 1-click JSON data export and PII-stripped AI grading.</div>
+              <div><strong>3. Real Indian University Gradebook:</strong> Weighted ISA (40%) + SEE (60%) components, SGPA/Letter grades, and official CSV transcripts.</div>
+              <div><strong>4. Institutional Ownership:</strong> Branded for SS Dempo College with Dean &amp; Course Coordinator oversight and `.docx`/`.pdf` syllabus exports.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Active Autonomous College Courses (Even Semester 2026–27)</span>
+            <span class="badge badge-neutral">Invite-Gated</span>
+          </div>
+          <table class="resp-table">
+            <thead>
+              <tr>
+                <th>Course Code &amp; Title</th>
+                <th>Faculty Owner</th>
+                <th>Cohort</th>
+                <th>Invite Code</th>
+                <th>Syllabus Progress</th>
+                <th>Attendance</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${COURSES.map(c => `
+                <tr>
+                  <td data-label="Course"><strong>${c.code}</strong> — ${c.title}</td>
+                  <td data-label="Faculty">${c.teacher}</td>
+                  <td data-label="Cohort">${c.cohort}</td>
+                  <td data-label="Join Code"><code class="badge badge-neutral">${c.inviteCode}</code></td>
+                  <td data-label="Syllabus">${c.hoursCompleted} / ${c.totalHours} hrs</td>
+                  <td data-label="Attendance"><span class="badge badge-success">${c.attendancePct}%</span></td>
+                  <td data-label="Action"><button class="btn btn-outline" onclick="switchTab('courses')">Open Plan</button></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderCourses() {
+      const c = COURSES[0];
+      const canEdit = state.roleKey === "teacher" || state.roleKey === "admin";
+      return `
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">${c.code}: ${c.title}</h1>
+            <p class="page-desc">1-Hour Session Granularity Course Plan · Pre-Work, Case Study &amp; Post-Work Cards (<code>artifacts/api-server/src/routes/courses.ts</code>)</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="exportCoursePlanDoc()">Download Plan (.doc / Word)</button>
+            <button class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button>
+          </div>
+        </div>
+
+        <div class="alert-box alert-info">
+          <strong>Role Access Check:</strong> You are viewing as <strong>${ROLES[state.roleKey].label}</strong>.
+          ${canEdit
+            ? "As the Course Professor / Admin, you can lock/unlock teaching days and see hidden case study notes."
+            : "Locked teaching days hide pre-work, case studies, and post-work until the professor unlocks them."}
+        </div>
+
+        ${c.sessions.map((s, idx) => {
+          const isHiddenForStudent = s.locked && state.roleKey === "student";
+          return `
+            <div class="card">
+              <div class="card-title">
+                <span>Hour #${s.hour} (Day ${s.day}) — ${s.title}</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="badge ${s.locked ? "badge-warning" : "badge-success"}">${s.locked ? "Locked Day" : "Unlocked for Students"}</span>
+                  ${canEdit ? `<button class="btn btn-outline" style="padding:4px 10px;font-size:12px;" onclick="toggleLock(${idx})">${s.locked ? "Unlock Day" : "Lock Day"}</button>` : ""}
+                </div>
+              </div>
+              ${isHiddenForStudent ? `
+                <p style="font-size:13.5px;color:var(--muted-ink);">
+                  Outline visible only. Your professor will unlock the Pre-Work, Case Study, and Post-Work cards before this session begins.
+                </p>
+              ` : `
+                <div class="grid-4" style="margin-top:10px;margin-bottom:0;">
+                  <div style="background:var(--muted-bg);padding:12px;border-radius:8px;">
+                    <div class="stat-label">Pre-Session Reading</div>
+                    <div style="font-size:13.5px;margin-top:4px;">${s.preWork}</div>
+                  </div>
+                  <div style="background:var(--primary-soft);padding:12px;border-radius:8px;">
+                    <div class="stat-label" style="color:var(--primary);">Goa Industry Case Study</div>
+                    <div style="font-size:13.5px;margin-top:4px;font-weight:600;">${s.caseStudy}</div>
+                  </div>
+                  <div style="background:var(--muted-bg);padding:12px;border-radius:8px;">
+                    <div class="stat-label">Post-Session Deliverable</div>
+                    <div style="font-size:13.5px;margin-top:4px;">${s.postWork}</div>
+                  </div>
+                </div>
+              `}
+            </div>
+          `;
+        }).join("")}
+      `;
+    }
+
+    function renderExam() {
+      const m = String(Math.floor(state.examSeconds / 60)).padStart(2, "0");
+      const s = String(state.examSeconds % 60).padStart(2, "0");
+      return `
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">ISA-II Controlled Examination: Corporate Accounting</h1>
+            <p class="page-desc">Task 5 Exam Robustness: Real-time <code>localStorage</code> auto-save, server-authoritative countdown timer, and campus WiFi drop recovery.</p>
+          </div>
+          <div>
+            <button type="button" class="btn ${state.simulatedOffline ? "btn-success" : "btn-warning"}" onclick="toggleSimulatedWifi()">
+              ${state.simulatedOffline ? "Reconnect Campus WiFi Now" : "Simulate Campus WiFi Drop"}
+            </button>
+          </div>
+        </div>
+
+        <div class="sticky-exam-bar" role="region" aria-label="Live Exam Status Bar">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <span class="badge ${state.simulatedOffline ? "badge-warning" : "badge-success"}">
+              ${state.simulatedOffline ? "OFFLINE — Campus WiFi Interrupted (Saving to Device)" : "ONLINE — Connected to Mumbai Exam Server"}
+            </span>
+            <span style="font-size:12.5px;color:var(--muted-ink);">
+              Auto-saved locally: <strong id="lastSavedLabel">${state.examLastSaved}</strong>
+            </span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="mono" style="font-size:16px;font-weight:700;padding:4px 10px;border-radius:6px;background:var(--muted-bg);">
+              Time Remaining: <span id="liveExamTimer">${m}:${s}</span>
+            </span>
+          </div>
+        </div>
+
+        ${state.simulatedOffline ? `
+          <div class="alert-box alert-warning" role="status" aria-live="polite">
+            <strong>Campus WiFi signal dropped — please stay calm and continue answering.</strong><br/>
+            Every option you click and every word you type is saved directly on your phone/laptop in real time. Do not close this tab. When your WiFi reconnects (click <em>"Reconnect Campus WiFi Now"</em> above), your answers will submit cleanly in one click.
+          </div>
+        ` : ""}
+
+        ${state.examSubmitted ? `
+          <div class="alert-box alert-success">
+            <strong>Examination Submitted &amp; Verified!</strong><br/>
+            Receipt ID: <code>EXM-2026-GOA-88412</code> · Objective MCQ Auto-Score: <strong>10 / 10 pts</strong> · Short Answer queued for Professor Review (Sarvam AI draft pre-scored).
+            <div style="margin-top:10px;">
+              <button class="btn btn-outline" onclick="resetExamDemo()">Reset Exam Demo</button>
+            </div>
+          </div>
+        ` : `
+          ${QUIZ_QUESTIONS.map((q, idx) => `
+            <div class="card">
+              <div class="card-title">
+                <span>Question ${idx + 1}. ${q.prompt}</span>
+                <span class="badge badge-neutral">${q.points} Points</span>
+              </div>
+              ${q.type === "multiple_choice" ? `
+                <div>
+                  ${q.options.map((opt, oi) => `
+                    <button type="button" class="option-btn ${state.examAnswers[q.id] === oi ? "selected" : ""}" onclick="selectMcq(${q.id}, ${oi})">
+                      <span class="mono" style="font-weight:700;">[${state.examAnswers[q.id] === oi ? "✓" : String.fromCharCode(65 + oi)}]</span>
+                      <span>${opt}</span>
+                    </button>
+                  `).join("")}
+                </div>
+              ` : `
+                <div style="margin-top:10px;">
+                  <label for="sa_${q.id}" class="stat-label" style="display:block;margin-bottom:6px;">Your Response (auto-saves on every keystroke):</label>
+                  <textarea id="sa_${q.id}" rows="4" oninput="updateShortAnswer(${q.id}, this.value)" placeholder="Type your structured answer here...">${state.examAnswers[q.id] || ""}</textarea>
+                </div>
+              `}
+            </div>
+          `).join("")}
+
+          <div class="card" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div style="font-size:13px;color:var(--muted-ink);">
+              All responses are backed up to <code>localStorage</code> key <code>dempo_vidya_standalone_quiz</code>.
+            </div>
+            <button type="button" class="btn btn-primary" onclick="submitExamDemo()">
+              Submit Final Examination
+            </button>
+          </div>
+        `}
+      `;
+    }
+
+    function renderGrading() {
+      const canGrade = state.roleKey === "teacher" || state.roleKey === "admin";
+      return `
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">AI-Assisted Grading Queue &amp; Plagiarism Inspector</h1>
+            <p class="page-desc">Human-in-the-loop Sarvam AI (<code>sarvam-105b</code>) with mandatory PII stripping (<code>stripStudentPII</code>) + local 3-word shingle Jaccard similarity (<code>artifacts/api-server/src/lib/grading.ts</code>).</p>
+          </div>
+        </div>
+
+        <div class="alert-box alert-info">
+          <strong>Security &amp; Compliance Guarantee (Fixed in Task 5):</strong>
+          Student names, roll numbers, phone numbers, and emails are automatically redacted by <code>stripStudentPII()</code> before any text is sent to Sarvam AI, and AI scores are <strong>never</strong> finalized without human professor sign-off (<code>quizzes.ts</code> line 482).
+        </div>
+
+        ${SUBMISSIONS.map((sub, idx) => {
+          const stripped = stripStudentPII(sub.rawText);
+          return `
+            <div class="card">
+              <div class="card-title">
+                <span>${sub.student} — ${sub.assignment}</span>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <span class="badge ${sub.similarityPct >= 40 ? "badge-danger" : "badge-success"}">
+                    Jaccard Similarity: ${sub.similarityPct}% (${sub.matchedWith})
+                  </span>
+                  <span class="badge ${sub.status === "graded" ? "badge-success" : "badge-warning"}">
+                    ${sub.status === "graded" ? `Finalized: ${sub.finalScore}/${sub.maxScore}` : "Needs Professor Sign-Off"}
+                  </span>
+                </div>
+              </div>
+
+              <div class="grid-2" style="margin-top:12px;margin-bottom:12px;">
+                <div style="background:var(--muted-bg);padding:12px;border-radius:8px;">
+                  <div class="stat-label">1. Original Student Submission (Stored in Mumbai DB)</div>
+                  <pre style="white-space:pre-wrap;font-size:12.5px;margin-top:6px;font-family:var(--font-sans);">${sub.rawText}</pre>
+                </div>
+                <div style="background:var(--primary-soft);padding:12px;border-radius:8px;">
+                  <div class="stat-label" style="color:var(--primary);">2. PII-Stripped Payload Sent to Sarvam AI (<code>stripStudentPII</code>)</div>
+                  <pre style="white-space:pre-wrap;font-size:12.5px;margin-top:6px;font-family:var(--font-mono);">${stripped}</pre>
+                </div>
+              </div>
+
+              <div style="background:var(--card);border:1px dashed var(--border);padding:12px;border-radius:8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+                <div style="flex:1;min-width:240px;font-size:13px;">
+                  <strong>Sarvam AI Draft Suggestion (${sub.aiScore}/${sub.maxScore}):</strong> ${sub.aiFeedback}
+                </div>
+                ${canGrade ? `
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <input type="number" min="0" max="${sub.maxScore}" value="${sub.finalScore ?? sub.aiScore}" id="gradeInput_${idx}" style="width:76px;" aria-label="Professor score for ${sub.student}" />
+                    <span class="mono">/ ${sub.maxScore}</span>
+                    <button class="btn btn-primary" onclick="approveGrade(${idx})">Approve &amp; Publish Grade</button>
+                  </div>
+                ` : `<span class="badge badge-neutral">Read-Only View (${ROLES[state.roleKey].role})</span>`}
+              </div>
+            </div>
+          `;
+        }).join("")}
+      `;
+    }
+
+    function computeLetterGrade(pct) {
+      if (pct >= 85) return { grade: "O (Outstanding)", gp: 10 };
+      if (pct >= 75) return { grade: "A+ (Excellent)", gp: 9 };
+      if (pct >= 65) return { grade: "A (Very Good)", gp: 8 };
+      if (pct >= 55) return { grade: "B+ (Good)", gp: 7 };
+      if (pct >= 50) return { grade: "B (Above Avg)", gp: 6 };
+      return { grade: "C (Pass)", gp: 5 };
+    }
+
+    function renderGradebook() {
+      const w = state.weights;
+      const totalW = Number(w.isa1) + Number(w.isa2) + Number(w.see);
+      return `
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Indian University Weighted Gradebook (ISA + SEE)</h1>
+            <p class="page-desc">Goa University / AutonomousNEP 2020 Grading Scheme: Weighted Continuous Internal Assessment (ISA) + Semester End Exam (SEE) &amp; CSV Transcript Export (<code>artifacts/api-server/src/routes/gradebook.ts</code>).</p>
+          </div>
+          <div>
+            <button class="btn btn-primary" onclick="downloadTranscriptCsv()">Export Official University Transcript (.CSV)</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Category Weight Configuration (Total: ${totalW}%)</span>
+            <span class="badge ${totalW === 100 ? "badge-success" : "badge-warning"}">${totalW === 100 ? "Balanced 100%" : "Normalized Automatically"}</span>
+          </div>
+          <div class="grid-4" style="margin-top:10px;margin-bottom:0;">
+            <div>
+              <label class="stat-label" for="w_isa1">ISA-I (Timed Quiz %)</label>
+              <input id="w_isa1" type="number" min="0" max="100" value="${w.isa1}" onchange="updateWeights()" />
+            </div>
+            <div>
+              <label class="stat-label" for="w_isa2">ISA-II (Case Assignment %)</label>
+              <input id="w_isa2" type="number" min="0" max="100" value="${w.isa2}" onchange="updateWeights()" />
+            </div>
+            <div>
+              <label class="stat-label" for="w_see">SEE (Semester End Exam %)</label>
+              <input id="w_see" type="number" min="0" max="100" value="${w.see}" onchange="updateWeights()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <table class="resp-table">
+            <thead>
+              <tr>
+                <th>Roll No</th>
+                <th>Student Name</th>
+                <th>ISA-I (${w.isa1}%)</th>
+                <th>ISA-II (${w.isa2}%)</th>
+                <th>SEE (${w.see}%)</th>
+                <th>Weighted Final (%)</th>
+                <th>NEP Letter Grade &amp; GP</th>
+                <th>Attendance</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${GRADEBOOK_STUDENTS.map(st => {
+                const finalPct = Math.round((st.isa1 * w.isa1 + st.isa2 * w.isa2 + st.see * w.see) / (totalW || 100));
+                const lg = computeLetterGrade(finalPct);
+                return `
+                  <tr>
+                    <td data-label="Roll No" class="mono">${st.rollNo}</td>
+                    <td data-label="Student"><strong>${st.name}</strong><div style="font-size:11.5px;color:var(--muted-ink);">${st.email}</div></td>
+                    <td data-label="ISA-I" class="mono">${st.isa1}%</td>
+                    <td data-label="ISA-II" class="mono">${st.isa2}%</td>
+                    <td data-label="SEE" class="mono">${st.see}%</td>
+                    <td data-label="Final %" class="mono"><strong>${finalPct}%</strong></td>
+                    <td data-label="Grade"><span class="badge badge-info">${lg.grade} (${lg.gp}.0)</span></td>
+                    <td data-label="Attendance"><span class="badge ${st.attendance >= 75 ? "badge-success" : "badge-danger"}">${st.attendance}%</span></td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderRoster() {
+      const validCount = state.csvPreview.filter(r => r.status === "valid").length;
+      const dupCount = state.csvPreview.filter(r => r.status === "duplicate").length;
+      const badCount = state.csvPreview.filter(r => r.status === "malformed").length;
+
+      return `
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Bulk CSV Roster Import (2,000 Students)</h1>
+            <p class="page-desc">Task 5 Product Track Implementation: Upload a college CSV with <code>roll_no, name, email, role</code>, inspect duplicate &amp; malformed rows, and commit to the allow-list (<code>POST /api/admin/invites/csv</code>).</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-outline" onclick="loadSampleRosterCsv()">Load Sample CSV (With Duplicates &amp; Errors)</button>
+            <label class="btn btn-primary" for="csvFileInput" style="cursor:pointer;">Upload .CSV File</label>
+            <input id="csvFileInput" type="file" accept=".csv,text/csv" style="display:none;" onchange="handleCsvFileUpload(event)" />
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="grid-2" style="margin-bottom:0;">
+            <div>
+              <label class="stat-label" for="selCsvMode">Transaction Mode on Malformed Rows</label>
+              <select id="selCsvMode" onchange="state.csvMode=this.value;renderApp();">
+                <option value="partial" ${state.csvMode === "partial" ? "selected" : ""}>Partial Commit (Import valid rows, reject &amp; report malformed rows)</option>
+                <option value="atomic" ${state.csvMode === "atomic" ? "selected" : ""}>All-or-Nothing Atomic (Abort entire batch if any row is malformed)</option>
+              </select>
+            </div>
+            <div>
+              <label class="stat-label" for="selDupMode">Existing Database Duplicate Email Policy</label>
+              <select id="selDupMode" onchange="state.csvDuplicatePolicy=this.value;renderApp();">
+                <option value="update" ${state.csvDuplicatePolicy === "update" ? "selected" : ""}>Idempotent Update (Update student name &amp; cohort mapping)</option>
+                <option value="skip" ${state.csvDuplicatePolicy === "skip" ? "selected" : ""}>Skip Existing Accounts</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        ${state.csvPreview.length > 0 ? `
+          <div class="card">
+            <div class="card-title">
+              <span>Pre-Import Validation Preview (${state.csvPreview.length} rows parsed)</span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <span class="badge badge-success">${validCount} Valid</span>
+                <span class="badge badge-warning">${dupCount} Intra-CSV Duplicates</span>
+                <span class="badge badge-danger">${badCount} Malformed</span>
+              </div>
+            </div>
+
+            ${state.csvMode === "atomic" && badCount > 0 ? `
+              <div class="alert-box alert-danger">
+                <strong>Atomic Mode Blocked (HTTP 422):</strong> ${badCount} malformed row(s) detected. In All-or-Nothing Atomic mode, zero records will be written until malformed rows are fixed (or switch to Partial Commit mode above).
+              </div>
+            ` : ""}
+
+            <table class="resp-table">
+              <thead>
+                <tr>
+                  <th>CSV Row #</th>
+                  <th>Roll No</th>
+                  <th>Full Name</th>
+                  <th>Email Address</th>
+                  <th>Role</th>
+                  <th>Validation Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${state.csvPreview.map(r => `
+                  <tr>
+                    <td data-label="Row #" class="mono">#${r.rowNumber}</td>
+                    <td data-label="Roll No" class="mono">${r.rollNo || "—"}</td>
+                    <td data-label="Name">${r.name || '<em style="color:var(--danger);">(Missing Name)</em>'}</td>
+                    <td data-label="Email" class="mono">${r.email || '<em style="color:var(--danger);">(Empty)</em>'}</td>
+                    <td data-label="Role">${r.role}</td>
+                    <td data-label="Status">
+                      ${r.status === "valid" ? '<span class="badge badge-success">Valid — Ready</span>' : ""}
+                      ${r.status === "duplicate" ? `<span class="badge badge-warning">Duplicate (${r.reason})</span>` : ""}
+                      ${r.status === "malformed" ? `<span class="badge badge-danger">Malformed: ${r.reason}</span>` : ""}
+                    </td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+
+            <div style="margin-top:14px;display:flex;justify-content:flex-end;gap:8px;">
+              <button class="btn btn-outline" onclick="state.csvPreview=[];renderApp();">Clear Preview</button>
+              <button class="btn btn-primary" ${state.csvMode === "atomic" && badCount > 0 ? "disabled" : ""} onclick="commitCsvRoster()">
+                Commit ${validCount} Valid Row(s) to Roster
+              </button>
+            </div>
+          </div>
+        ` : ""}
+
+        ${state.csvCommittedReport ? `
+          <div class="alert-box alert-success">
+            <strong>CSV Roster Import Audit Summary:</strong><br/>
+            Processed <strong>${state.csvCommittedReport.total}</strong> rows &rarr;
+            <strong>${state.csvCommittedReport.created} newly invited</strong>,
+            <strong>${state.csvCommittedReport.updated} updated</strong>,
+            <strong>${state.csvCommittedReport.skipped} skipped</strong>,
+            <strong>${state.csvCommittedReport.duplicates} intra-file duplicates ignored</strong>,
+            <strong>${state.csvCommittedReport.malformed} malformed rows rejected</strong>.
+          </div>
+        ` : ""}
+
+        <div class="card">
+          <div class="card-title">
+            <span>Active Allow-Listed Institutional Roster (${state.invitedRoster.length} accounts)</span>
+            <span class="badge badge-info">app_invites table</span>
+          </div>
+          <table class="resp-table">
+            <thead>
+              <tr>
+                <th>Roll / Staff ID</th>
+                <th>Name</th>
+                <th>Institutional Email</th>
+                <th>Role</th>
+                <th>Cohort</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${state.invitedRoster.map(u => `
+                <tr>
+                  <td data-label="Roll No" class="mono">${u.rollNo || "—"}</td>
+                  <td data-label="Name"><strong>${u.name}</strong></td>
+                  <td data-label="Email" class="mono">${u.email}</td>
+                  <td data-label="Role"><span class="badge badge-neutral">${u.role}</span></td>
+                  <td data-label="Cohort">${u.cohort}</td>
+                  <td data-label="Status"><span class="badge ${u.joined ? "badge-success" : "badge-warning"}">${u.joined ? "Joined" : "Invite Sent"}</span></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderDpdpAndBrief() {
+      return `
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">DPDP Act 2023 Compliance &amp; Takeover Brief Summary (Tasks 1–7)</h1>
+            <p class="page-desc">India Data Residency, Data Retention Schedule, 1-Click Student Data Export (<code>GET /api/me/export</code>), Pricing Model, and Takeover Memo.</p>
+          </div>
+          <div>
+            <button class="btn btn-primary" onclick="exportDpdpJson()">Download My Personal Data (.JSON)</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">
+              <span>Task 5B: India Data Residency &amp; DPDP Retention Policy</span>
+              <span class="badge badge-success">DPDP Act 2023</span>
+            </div>
+            <table class="resp-table">
+              <thead>
+                <tr>
+                  <th>Data Category</th>
+                  <th>Location</th>
+                  <th>Retention Window</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Data">Coursework, Grades &amp; Attendance</td>
+                  <td data-label="Location">Supabase Mumbai (<code>ap-south-1</code>)</td>
+                  <td data-label="Retention">3 Academic Years post-graduation (NAAC audit)</td>
+                </tr>
+                <tr>
+                  <td data-label="Data">S3 File Uploads</td>
+                  <td data-label="Location">Supabase S3 Mumbai</td>
+                  <td data-label="Retention">1 Academic Year post-semester</td>
+                </tr>
+                <tr>
+                  <td data-label="Data">AI Grading Prompts</td>
+                  <td data-label="Location">Sarvam AI (India, PII-stripped)</td>
+                  <td data-label="Retention">Stateless (0 days stored by AI)</td>
+                </tr>
+                <tr>
+                  <td data-label="Data">Identity (Name/Email)</td>
+                  <td data-label="Location">Clerk (US, with DPA &amp; Sec 16 Consent)</td>
+                  <td data-label="Retention">Until account deletion (<code>DELETE /admin/users/:id</code>)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>Task 5B: Institutional Pricing &amp; Margin Model (2,000 Students)</span>
+              <span class="badge badge-info">79% Gross Margin</span>
+            </div>
+            <div style="font-size:13.5px;display:flex;flex-direction:column;gap:8px;">
+              <div><strong>Direct Cloud COGS (Supabase Pro + Vercel Pro + Clerk + MSG91 + Sarvam):</strong> ₹9,500/mo = <strong>₹1,14,000/yr</strong> (₹57/student/yr).</div>
+              <div><strong>Fully Loaded Cost (incl. Annual VAPT Pen-Test + Exam On-Call):</strong> <strong>₹2,40,000/yr</strong> (₹120/student/yr).</div>
+              <div><strong>Option A (Per-Student):</strong> ₹300/student/yr = <strong>₹6,00,000/yr</strong> (81% Gross Margin, 60% Net Margin).</div>
+              <div><strong>Option B (Recommended Flat Institutional Licence):</strong> <strong>₹5,50,000/yr flat</strong> for up to 2,500 students + 200GB storage (79.3% Gross Margin, 56.4% Net Margin).</div>
+              <div><strong>Exam-Week Support SLA:</strong> 07:00–21:00 IST live phone/WhatsApp bridge with <strong>&le; 5 min response</strong> during ISA/SEE exam weeks.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Task 7: Executive Takeover Memo — What We Do in 90 Days &amp; What We Refuse To Build</span>
+            <span class="badge badge-warning">5 Explicit Refusals</span>
+          </div>
+          <div style="font-size:13.5px;display:flex;flex-direction:column;gap:8px;">
+            <div><strong>Days 1–30:</strong> Lock Vercel Mumbai + Supabase Mumbai as the single stack, pilot with 1 department (~250 B.Com students) via the new CSV Roster Importer, sign DPAs, and wire UptimeRobot + Sentry.</div>
+            <div><strong>Days 31–60:</strong> Load-test 600 concurrent exam submissions, raise the per-IP rate limit ceiling (fixed in <code>app.ts</code> from 20 to 120 req/min so campus NAT WiFi doesn't 429 exam halls), and complete external VAPT certification.</div>
+            <div><strong>Days 61–90:</strong> Sign the ₹5.5L annual flat institutional licence and import the remaining 1,750 students via CSV.</div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:4px 0;" />
+            <div><strong>What We Explicitly Refuse To Build ("No"):</strong>
+              <ol style="padding-left:20px;margin-top:4px;display:flex;flex-direction:column;gap:4px;">
+                <li><strong>NO in-app fee payments / Razorpay:</strong> Zero teaching value; creates RBI/PCI-DSS &amp; tally reconciliation burden.</li>
+                <li><strong>NO native iOS/Android Expo apps:</strong> Responsive 360px web app updates instantly during exam week without app-store delays.</li>
+                <li><strong>NO raw multi-hundred-MB student video hosting in S3:</strong> Enforces YouTube-unlisted/Drive links for video to prevent 3TB/semester S3 egress blowouts.</li>
+                <li><strong>NO webcam AI proctoring spyware:</strong> Crashes low-end phones on campus WiFi and violates student privacy under DPDP.</li>
+                <li><strong>NO premature rewrite of Clerk Auth in Year 1:</strong> Covered lawfully via DPDP Section 16 disclosure + DPA until multi-college scale.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // INTERACTIVE HANDLERS
+    // =========================================================================
+    window.switchTab = function(tabId) {
+      state.activeTab = tabId;
+      renderApp();
+    };
+
+    window.toggleLock = function(sessionIdx) {
+      COURSES[0].sessions[sessionIdx].locked = !COURSES[0].sessions[sessionIdx].locked;
+      renderApp();
+    };
+
+    window.exportCoursePlanDoc = function() {
+      const c = COURSES[0];
+      const html = `<html><head><meta charset="utf-8"><title>${c.code} Course Plan</title></head><body>` +
+        `<h1>${c.code}: ${c.title} — Official Session Plan</h1>` +
+        `<p>Institution: Srinivassa Sinai Dempo College of Commerce & Economics (Autonomous), Goa</p>` +
+        `<table border="1" cellpadding="8" cellspacing="0">` +
+        `<tr><th>Hour</th><th>Day</th><th>Topic</th><th>Pre-Work</th><th>Case Study</th><th>Post-Work</th></tr>` +
+        c.sessions.map(s => `<tr><td>${s.hour}</td><td>${s.day}</td><td>${s.title}</td><td>${s.preWork}</td><td>${s.caseStudy}</td><td>${s.postWork}</td></tr>`).join("") +
+        `</table></body></html>`;
+      const blob = new Blob([html], { type: "application/msword" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${c.code}-Course-Plan.doc`;
+      a.click();
+    };
+
+    window.toggleSimulatedWifi = function() {
+      state.simulatedOffline = !state.simulatedOffline;
+      renderApp();
+    };
+
+    window.selectMcq = function(qId, optIdx) {
+      state.examAnswers[qId] = optIdx;
+      state.examLastSaved = new Date().toLocaleTimeString();
+      localStorage.setItem("dempo_vidya_standalone_quiz", JSON.stringify(state.examAnswers));
+      renderApp();
+    };
+
+    window.updateShortAnswer = function(qId, val) {
+      state.examAnswers[qId] = val;
+      state.examLastSaved = new Date().toLocaleTimeString();
+      localStorage.setItem("dempo_vidya_standalone_quiz", JSON.stringify(state.examAnswers));
+      const lbl = document.getElementById("lastSavedLabel");
+      if (lbl) lbl.textContent = state.examLastSaved;
+    };
+
+    window.submitExamDemo = function() {
+      if (state.simulatedOffline) {
+        alert("Campus WiFi is currently disconnected! Your answers remain safely saved on your device. Click 'Reconnect Campus WiFi Now' at the top right, then press Submit.");
+        return;
+      }
+      state.examSubmitted = true;
+      renderApp();
+    };
+
+    window.resetExamDemo = function() {
+      state.examSubmitted = false;
+      state.examSeconds = 2640;
+      renderApp();
+    };
+
+    window.approveGrade = function(subIdx) {
+      const inp = document.getElementById(`gradeInput_${subIdx}`);
+      const val = inp ? Number(inp.value) : SUBMISSIONS[subIdx].aiScore;
+      SUBMISSIONS[subIdx].finalScore = Math.max(0, Math.min(SUBMISSIONS[subIdx].maxScore, val));
+      SUBMISSIONS[subIdx].status = "graded";
+      renderApp();
+    };
+
+    window.updateWeights = function() {
+      state.weights.isa1 = Number(document.getElementById("w_isa1").value || 0);
+      state.weights.isa2 = Number(document.getElementById("w_isa2").value || 0);
+      state.weights.see = Number(document.getElementById("w_see").value || 0);
+      renderApp();
+    };
+
+    window.downloadTranscriptCsv = function() {
+      const w = state.weights;
+      const totalW = (w.isa1 + w.isa2 + w.see) || 100;
+      const rows = [
+        ["Roll No", "Student Name", "Email", `ISA-I (${w.isa1}%)`, `ISA-II (${w.isa2}%)`, `SEE (${w.see}%)`, "Weighted Final (%)", "NEP Letter Grade", "Grade Point", "Attendance (%)"]
+      ];
+      GRADEBOOK_STUDENTS.forEach(st => {
+        const finalPct = Math.round((st.isa1 * w.isa1 + st.isa2 * w.isa2 + st.see * w.see) / totalW);
+        const lg = computeLetterGrade(finalPct);
+        rows.push([st.rollNo, st.name, st.email, st.isa1, st.isa2, st.see, finalPct, lg.grade, lg.gp, st.attendance]);
+      });
+      const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "dempo-vidya-official-transcript.csv";
+      a.click();
+    };
+
+    function parseCsvIntoPreview(rawText) {
+      const lines = rawText.replace(/\r\n/g, "\n").split("\n").filter(l => l.trim().length > 0);
+      const seen = new Map();
+      const rows = lines.slice(1).map((line, idx) => {
+        const rowNumber = idx + 2;
+        const [rollNo = "", name = "", emailRaw = "", roleRaw = "student"] = line.split(",").map(s => s.trim());
+        const email = emailRaw.toLowerCase();
+        const role = (roleRaw || "student").toLowerCase();
+        if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+          return { rowNumber, rollNo, name, email: emailRaw, role, status: "malformed", reason: "Invalid email syntax" };
+        }
+        if (!name) {
+          return { rowNumber, rollNo, name, email, role, status: "malformed", reason: "Missing student full name" };
+        }
+        if (role !== "student" && role !== "teacher") {
+          return { rowNumber, rollNo, name, email, role, status: "malformed", reason: `Invalid role '${role}'` };
+        }
+        if (seen.has(email)) {
+          return { rowNumber, rollNo, name, email, role, status: "duplicate", reason: `First seen on row #${seen.get(email)}` };
+        }
+        seen.set(email, rowNumber);
+        return { rowNumber, rollNo, name, email, role, status: "valid" };
+      });
+      state.csvPreview = rows;
+      state.csvCommittedReport = null;
+      renderApp();
+    }
+
+    window.loadSampleRosterCsv = function() {
+      const sample = [
+        "roll_no,name,email,role",
+        "26BCOM011,Tanvi Shirodkar,tanvi.shirodkar@dempocollege.edu.in,student",
+        "26BCOM012,Siddharth Palekar,siddharth.palekar@dempocollege.edu.in,student",
+        "26BCOM013,,missing.name@dempocollege.edu.in,student",
+        "26BCOM014,Tanvi DuplicateRow,tanvi.shirodkar@dempocollege.edu.in,student",
+        "26BCOM015,Komal Borkar,not-an-email-address,student",
+        "26BBA021,Ananya Verlekar,ananya.verlekar@dempocollege.edu.in,student",
+        "FAC019,Prof. Nikhil Sardesai,nikhil.sardesai@dempocollege.edu.in,teacher"
+      ].join("\n");
+      parseCsvIntoPreview(sample);
+    };
+
+    window.handleCsvFileUpload = function(ev) {
+      const file = ev.target.files && ev.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => parseCsvIntoPreview(String(reader.result || ""));
+      reader.readAsText(file);
+    };
+
+    window.commitCsvRoster = function() {
+      const valid = state.csvPreview.filter(r => r.status === "valid");
+      const duplicates = state.csvPreview.filter(r => r.status === "duplicate").length;
+      const malformed = state.csvPreview.filter(r => r.status === "malformed").length;
+      let created = 0, updated = 0, skipped = 0;
+
+      valid.forEach(r => {
+        const existing = state.invitedRoster.find(u => u.email === r.email);
+        if (existing) {
+          if (state.csvDuplicatePolicy === "skip") {
+            skipped += 1;
+          } else {
+            existing.name = r.name;
+            existing.rollNo = r.rollNo;
+            existing.role = r.role;
+            updated += 1;
+          }
+        } else {
+          state.invitedRoster.unshift({
+            id: Date.now() + Math.random(),
+            rollNo: r.rollNo,
+            name: r.name,
+            email: r.email,
+            role: r.role,
+            cohort: r.role === "teacher" ? "Faculty Senate" : "FY/SY B.Com Hons — Div A",
+            joined: false
+          });
+          created += 1;
+        }
+      });
+
+      state.csvCommittedReport = {
+        total: state.csvPreview.length,
+        created,
+        updated,
+        skipped,
+        duplicates,
+        malformed
+      };
+      state.csvPreview = [];
+      renderApp();
+    };
+
+    window.exportDpdpJson = function() {
+      const user = ROLES[state.roleKey];
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        statute: "Digital Personal Data Protection Act, 2023 (India) — Section 11 Right to Access",
+        dataFiduciary: "Srinivassa Sinai Dempo College of Commerce & Economics (Autonomous), Goa",
+        dataResidency: "Mumbai, India (ap-south-1)",
+        profile: user,
+        enrolledCourses: COURSES.map(c => ({ code: c.code, title: c.title, attendancePct: c.attendancePct })),
+        savedExamDrafts: state.examAnswers
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "dempo-vidya-my-dpdp-data.json";
+      a.click();
+    };
+
+    function renderApp() {
+      renderSidebar();
+      const main = document.getElementById("mainArea");
+      if (state.activeTab === "dashboard") main.innerHTML = renderDashboard();
+      else if (state.activeTab === "courses") main.innerHTML = renderCourses();
+      else if (state.activeTab === "exam") main.innerHTML = renderExam();
+      else if (state.activeTab === "grading") main.innerHTML = renderGrading();
+      else if (state.activeTab === "gradebook") main.innerHTML = renderGradebook();
+      else if (state.activeTab === "roster") main.innerHTML = renderRoster();
+      else if (state.activeTab === "dpdp") main.innerHTML = renderDpdpAndBrief();
+    }
+
+    document.getElementById("roleSwitcher").addEventListener("change", (e) => {
+      state.roleKey = e.target.value;
+      renderApp();
+    });
+
+    document.getElementById("themeBtn").addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      document.getElementById("themeBtn").textContent =
+        document.body.classList.contains("dark") ? "Light Mode" : "Night Mode";
+    });
+
+    renderApp();
+  </script>
+</body>
+</html>

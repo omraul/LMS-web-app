@@ -21,6 +21,19 @@ function gradingModel(): string {
 }
 
 /**
+ * Defense-in-depth DPDP compliance: strip student emails, Indian mobile numbers,
+ * college roll numbers (e.g. 24BCOM042 / Roll No: 12345), and Name/Student ID
+ * header lines before any submission text leaves the server for AI grading.
+ */
+export function stripStudentPII(text: string): string {
+  return text
+    .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, "[REDACTED_EMAIL]")
+    .replace(/\b(?:\+91[-\s]?)?[6-9]\d{9}\b/g, "[REDACTED_PHONE]")
+    .replace(/\b\d{2}[A-Z]{2,6}\d{2,4}\b/gi, "[REDACTED_ROLL_NO]")
+    .replace(/^(?:name|student\s*name|roll\s*(?:no|number)|prn|uid|registration\s*no)\s*[:=-].*$/gim, "[REDACTED_IDENTITY_HEADER]");
+}
+
+/**
  * Grade a text submission with the AI model. Returns a suggested score out of
  * maxScore plus written feedback. Returns nulls when there is no text to grade
  * or the model call fails (grading is best-effort and never blocks submission).
@@ -47,6 +60,8 @@ export async function gradeTextSubmission(
           .join("\n")}\nAward points per criterion and sum them for the score; reference the criteria in your feedback.\n`
       : "";
 
+  const sanitizedResponse = stripStudentPII(textResponse);
+
   const prompt = `You are an experienced teaching assistant grading a student submission.
 
 Assignment: ${assignmentTitle}
@@ -55,7 +70,7 @@ Maximum score: ${maxScore}
 ${rubricBlock}
 Student submission:
 """
-${textResponse}
+${sanitizedResponse}
 """
 
 Grade this submission. Respond ONLY with a JSON object of the exact shape:
@@ -117,6 +132,8 @@ export async function gradeShortAnswer(
     return { aiScore: null, aiFeedback: null };
   }
 
+  const sanitizedAnswer = stripStudentPII(answer);
+
   const prompt = `You are grading one short-answer quiz question.
 
 Question: ${questionPrompt}
@@ -124,7 +141,7 @@ Maximum points: ${points}
 
 Student answer:
 """
-${answer}
+${sanitizedAnswer}
 """
 
 Respond ONLY with a JSON object of the exact shape:

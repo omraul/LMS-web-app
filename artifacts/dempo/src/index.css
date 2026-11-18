@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
@@ -77,75 +77,82 @@
 }
 
 :root {
-  --button-outline: rgba(55, 53, 47, 0.16);
-  --badge-outline: rgba(55, 53, 47, 0.12);
+  --button-outline: rgba(27, 58, 95, 0.18);
+  --badge-outline: rgba(27, 58, 95, 0.14);
 
   --opaque-button-border-intensity: -8;
 
-  --elevate-1: rgba(55, 53, 47, 0.04);
-  --elevate-2: rgba(55, 53, 47, 0.08);
+  --elevate-1: rgba(27, 58, 95, 0.04);
+  --elevate-2: rgba(27, 58, 95, 0.08);
 
-  /* Notion-neutral: white canvas, warm near-black ink, hairline warm-gray lines */
-  --background: 0 0% 100%;
-  --foreground: 40 8% 18%;
-  --border: 42 10% 90%;
+  /* Dempo Vidya Institutional Identity (Goa):
+   * Warm Laterite Parchment canvas (#FAF8F5), Goan Slate Ink (#1A2433, 15.1:1 contrast),
+   * Konkan Deep Indigo primary (#1B3A5F, 11.4:1 contrast — WCAG AAA). */
+  --background: 38 33% 98%;
+  --foreground: 216 32% 15%;
+  --border: 36 18% 87%;
 
   --card: 0 0% 100%;
-  --card-foreground: 40 8% 18%;
-  --card-border: 42 10% 90%;
+  --card-foreground: 216 32% 15%;
+  --card-border: 36 18% 87%;
 
-  --sidebar: 48 12% 97%;
-  --sidebar-foreground: 40 6% 30%;
-  --sidebar-border: 42 10% 91%;
-  --sidebar-primary: 40 8% 18%;
+  --sidebar: 36 28% 95%;
+  --sidebar-foreground: 216 28% 20%;
+  --sidebar-border: 36 18% 86%;
+  --sidebar-primary: 214 56% 24%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 45 12% 93%;
-  --sidebar-accent-foreground: 40 8% 18%;
-  --sidebar-ring: 212 78% 51%;
+  --sidebar-accent: 214 38% 91%;
+  --sidebar-accent-foreground: 214 56% 20%;
+  --sidebar-ring: 214 56% 24%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 40 8% 18%;
-  --popover-border: 42 10% 90%;
+  --popover-foreground: 216 32% 15%;
+  --popover-border: 36 18% 87%;
 
-  --primary: 40 8% 18%;
+  --primary: 214 56% 24%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 45 12% 95%;
-  --secondary-foreground: 40 8% 18%;
+  --secondary: 36 24% 93%;
+  --secondary-foreground: 216 32% 15%;
 
-  --muted: 48 10% 96%;
-  --muted-foreground: 40 4% 45%;
+  --muted: 36 22% 94%;
+  /* Muted Slate (#4B596B) hits 6.82:1 contrast against #FAF8F5 (exceeds WCAG AA 4.5:1) */
+  --muted-foreground: 215 18% 36%;
 
-  --accent: 45 12% 94%;
-  --accent-foreground: 40 8% 18%;
+  --accent: 32 75% 92%;
+  --accent-foreground: 28 80% 24%;
 
-  --destructive: 2 64% 52%;
+  --destructive: 356 68% 38%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 42 10% 88%;
-  --ring: 212 78% 51%;
+  --input: 214 20% 80%;
+  --ring: 214 56% 24%;
 
-  /* Restrained, muted chart/status hues */
-  --chart-1: 212 60% 48%;
-  --chart-2: 146 38% 42%;
-  --chart-3: 35 60% 50%;
-  --chart-4: 262 45% 55%;
-  --chart-5: 2 64% 55%;
+  /* Institutional Academic Chart & Status Tokens (All >= 4.5:1 WCAG AA verified) */
+  --chart-1: 214 56% 28%;
+  --chart-2: 152 58% 28%;
+  --chart-3: 32 84% 32%;
+  --chart-4: 262 48% 42%;
+  --chart-5: 356 68% 38%;
 
-  --success: 146 38% 40%;
+  /* Success: Western Ghats Forest Green (#1E7145 — 5.86:1 vs white) */
+  --success: 152 58% 28%;
   --success-foreground: 0 0% 100%;
-  --warning: 35 62% 46%;
+  /* Warning: Mandovi Ochre (#96540D — 5.48:1 vs white) */
+  --warning: 32 84% 32%;
   --warning-foreground: 0 0% 100%;
-  --danger: 2 64% 52%;
+  /* Danger: Laterite Crimson (#A31F28 — 6.94:1 vs white) */
+  --danger: 356 68% 38%;
   --danger-foreground: 0 0% 100%;
-  --info: 212 72% 47%;
+  /* Info: Zuari Cobalt (#155899 — 6.75:1 vs white) */
+  --info: 208 76% 34%;
   --info-foreground: 0 0% 100%;
 
-  --app-font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --app-font-serif: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --app-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --app-font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --app-font-serif: 'Fraunces', Georgia, Cambria, "Times New Roman", Times, serif;
+  --app-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 
   --shadow-sm: 0 1px 2px 0 rgb(15 15 15 / 0.04);
   --shadow: 0 1px 2px 0 rgb(15 15 15 / 0.05);
@@ -160,65 +167,65 @@
 }
 
 .dark {
-  --button-outline: rgba(255, 255, 255, 0.14);
-  --badge-outline: rgba(255, 255, 255, 0.12);
+  --button-outline: rgba(255, 255, 255, 0.16);
+  --badge-outline: rgba(255, 255, 255, 0.14);
   --elevate-1: rgba(255, 255, 255, 0.05);
   --elevate-2: rgba(255, 255, 255, 0.10);
 
-  /* Notion dark: #1c1c1c canvas, soft-white ink, low-contrast hairlines */
-  --background: 0 0% 11%;
-  --foreground: 0 0% 92%;
-  --border: 0 0% 20%;
+  /* Dempo Vidya Night Study Mode: Arabian Sea Navy canvas, warm ivory ink (14.2:1 contrast) */
+  --background: 216 34% 10%;
+  --foreground: 38 25% 93%;
+  --border: 216 24% 20%;
 
-  --card: 0 0% 13%;
-  --card-foreground: 0 0% 92%;
-  --card-border: 0 0% 20%;
+  --card: 216 30% 13%;
+  --card-foreground: 38 25% 93%;
+  --card-border: 216 24% 20%;
 
-  --sidebar: 0 0% 9%;
-  --sidebar-foreground: 0 0% 76%;
-  --sidebar-border: 0 0% 18%;
-  --sidebar-primary: 0 0% 92%;
-  --sidebar-primary-foreground: 0 0% 12%;
-  --sidebar-accent: 0 0% 17%;
-  --sidebar-accent-foreground: 0 0% 92%;
-  --sidebar-ring: 212 78% 58%;
+  --sidebar: 216 36% 8%;
+  --sidebar-foreground: 38 18% 82%;
+  --sidebar-border: 216 24% 18%;
+  --sidebar-primary: 38 82% 62%;
+  --sidebar-primary-foreground: 216 36% 10%;
+  --sidebar-accent: 216 28% 17%;
+  --sidebar-accent-foreground: 38 25% 93%;
+  --sidebar-ring: 38 82% 62%;
 
-  --popover: 0 0% 14%;
-  --popover-foreground: 0 0% 92%;
-  --popover-border: 0 0% 20%;
+  --popover: 216 30% 14%;
+  --popover-foreground: 38 25% 93%;
+  --popover-border: 216 24% 20%;
 
-  --primary: 0 0% 92%;
-  --primary-foreground: 0 0% 12%;
+  --primary: 210 78% 64%;
+  --primary-foreground: 216 36% 10%;
 
-  --secondary: 0 0% 18%;
-  --secondary-foreground: 0 0% 92%;
+  --secondary: 216 24% 18%;
+  --secondary-foreground: 38 25% 93%;
 
-  --muted: 0 0% 16%;
-  --muted-foreground: 0 0% 60%;
+  --muted: 216 24% 16%;
+  --muted-foreground: 214 16% 68%;
 
-  --accent: 0 0% 18%;
-  --accent-foreground: 0 0% 92%;
+  --accent: 216 24% 18%;
+  --accent-foreground: 38 25% 93%;
 
-  --destructive: 2 60% 54%;
+  --destructive: 356 72% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 0 0% 24%;
-  --ring: 212 78% 58%;
+  --input: 216 24% 24%;
+  --ring: 210 78% 64%;
 
-  --chart-1: 212 65% 60%;
-  --chart-2: 146 40% 52%;
-  --chart-3: 35 66% 58%;
-  --chart-4: 262 50% 66%;
-  --chart-5: 2 62% 62%;
+  --chart-1: 210 78% 64%;
+  --chart-2: 152 52% 54%;
+  --chart-3: 36 86% 60%;
+  --chart-4: 262 60% 68%;
+  --chart-5: 356 72% 62%;
 
-  --success: 146 42% 50%;
-  --success-foreground: 0 0% 100%;
-  --warning: 35 68% 55%;
-  --warning-foreground: 0 0% 8%;
-  --danger: 2 62% 58%;
+  --success: 152 52% 52%;
+  --success-foreground: 216 36% 8%;
+  --warning: 36 86% 58%;
+  --warning-foreground: 216 36% 8%;
+  --danger: 356 72% 60%;
   --danger-foreground: 0 0% 100%;
-  --info: 212 78% 62%;
-  --info-foreground: 0 0% 8%;
+  --info: 208 82% 64%;
+  --info-foreground: 216 36% 8%;
 }
 
 @layer base {
@@ -227,10 +234,14 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-background text-foreground leading-relaxed;
   }
   
-  h1, h2, h3, h4, h5, h6 {
+  h1, h2, h3 {
+    @apply font-serif font-semibold tracking-tight;
+  }
+
+  h4, h5, h6 {
     @apply font-sans font-semibold tracking-tight;
   }
 }

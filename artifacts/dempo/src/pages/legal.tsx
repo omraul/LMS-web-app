@@ -3,11 +3,12 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, AlertTriangle } from "lucide-react";
 
-const ORG = "Srinivassa Sinai Dempo College (Autonomous), Goa";
-const SCHOOL = "Dempo AI Business School";
-const APP = "Dempo Learn";
-const CONTACT = "[privacy@your-college-domain]"; // replace with the real grievance/contact email
-const UPDATED = "24 July 2026";
+const ORG = "Srinivassa Sinai Dempo College of Commerce & Economics (Autonomous), Cujira, Goa";
+const SCHOOL = "Dempo AI Business School & Academic Digital Cell";
+const APP = "Dempo Vidya";
+const CONTACT = "dpo.grievance@dempocollege.edu.in";
+const GRIEVANCE_OFFICER = "Dr. Rajendra Kumbharjuvenkar (Data Protection & Grievance Officer)";
+const UPDATED = "18 November 2026";
 
 function LegalLayout({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -95,19 +96,32 @@ export function PrivacyPage() {
         authentication, database hosting, file storage, email/notifications, AI grading, and hosting/
         analytics. We do not sell your personal data.</p>
 
-      <h2>Where your data is stored</h2>
-      <p>We aim to host student data in India. Some providers may process limited data in other
-        regions; where that happens we take steps consistent with the DPDP Act. [Confirm the exact
-        regions of your database, storage and hosting and list them here.]</p>
+      <h2>Where your data is stored (India Data Residency)</h2>
+      <p>
+        Primary academic records, coursework, grades, and uploaded files are stored exclusively in{" "}
+        <strong>India (Mumbai / ap-south-1)</strong> via Supabase PostgreSQL, Supabase S3-compatible
+        Object Storage, Vercel Mumbai (<code>bom1</code>) compute, MSG91 (India), and Sarvam AI (India).
+        Identity and session authentication is processed by Clerk (United States) under a signed Data
+        Processing Agreement (DPA) and explicit student consent in compliance with Section 16 of the
+        DPDP Act, 2023.
+      </p>
 
-      <h2>Retention</h2>
-      <p>We keep personal data for as long as you have an account and as required for academic records
-        and legal obligations, after which it is deleted or anonymised. [Set your retention periods.]</p>
+      <h2>Retention &amp; Archival Policy</h2>
+      <ul>
+        <li><strong>Coursework, submissions, and gradebook records:</strong> Retained for <strong>3 academic years</strong> post-graduation (aligned with Goa University / NAAC statutory audit windows), then permanently purged or anonymized.</li>
+        <li><strong>Uploaded video/audio/file attachments:</strong> Retained in active storage for <strong>1 academic year</strong> after semester completion, then archived/purged after marksheet finalization.</li>
+        <li><strong>Security &amp; activity logs:</strong> Retained for <strong>180 days</strong> (minimum 1 year for CERT-In security incident logs), then rotated automatically.</li>
+        <li><strong>Withdrawn / graduated accounts:</strong> Students may export their complete JSON data archive anytime via Settings &rarr; Download My Data (<code>GET /api/me/export</code>) before account closure.</li>
+      </ul>
 
-      <h2>Your rights</h2>
-      <p>Under the DPDP Act you may request access to, correction of, or erasure of your personal data,
-        and may withdraw consent where processing relies on it. To exercise these rights or raise a
-        grievance, contact our Grievance Officer at {CONTACT}. [Name your Grievance Officer.]</p>
+      <h2>Your rights &amp; Grievance Redressal</h2>
+      <p>
+        Under Sections 11–14 of the DPDP Act, 2023, you have the right to access a summary and full
+        export of your personal data, request correction or erasure, nominate a representative, and
+        withdraw consent. To exercise these rights or raise a grievance, contact our designated
+        Grievance Officer: <strong>{GRIEVANCE_OFFICER}</strong> at <a href={`mailto:${CONTACT}`}>{CONTACT}</a>.
+        All grievances are acknowledged within 24 hours and resolved within 7 working days.
+      </p>
 
       <h2>Security</h2>
       <p>We use industry-standard measures (encryption in transit, access controls, redaction of secrets

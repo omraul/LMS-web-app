@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import {
   useGetMe,
@@ -27,7 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import { QuizFormDialog } from "@/components/quiz-dialog";
 import {
   Loader2, Clock, Award, CheckCircle, CheckCircle2, XCircle, Circle,
-  Pencil, Trash2, Megaphone, Send, ListChecks, Type, ChevronDown, ChevronUp, Sparkles,
+  Pencil, Trash2, Megaphone, Send, ListChecks, Type, ChevronDown, ChevronUp, Sparkles, Wifi, WifiOff, ShieldCheck,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -134,7 +134,7 @@ function TeacherActions({ quiz }: { quiz: any }) {
             <AlertDialogHeader>
               <AlertDialogTitle>Publish results to students?</AlertDialogTitle>
               <AlertDialogDescription>
-                Every attempt will be finalized (AI-suggested scores are accepted where you haven't adjusted them) and students will see their scores and the correct answers. This can't be undone.
+                Every attempt will be finalized. Multiple-choice scores are finalized automatically; any short-answer question without a manual professor score defaults to 0 (AI suggestions are never auto-finalized without human review). Students will immediately see their scores and answer keys.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -410,11 +410,75 @@ function StudentQuizBody({ quiz }: { quiz: any }) {
 }
 
 function StudentQuizForm({ quiz }: { quiz: any }) {
-  const [answers, setAnswers] = useState<Record<number, { selectedOption?: number; textAnswer?: string }>>({});
+  const storageKey = `dempo-vidya-quiz-draft-${quiz.id}`;
+  const [answers, setAnswers] = useState<Record<number, { selectedOption?: number; textAnswer?: string }>>(() => {
+    try {
+      const saved = window.localStorage.getItem(storageKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
+  const [isOnline, setIsOnline] = useState<boolean>(() => (typeof navigator !== "undefined" ? navigator.onLine : true));
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(() => {
+    if (quiz.dueDate) {
+      const diff = Math.floor((new Date(quiz.dueDate).getTime() - Date.now()) / 1000);
+      return diff > 0 ? diff : 2700;
+    }
+    return 2700; // Default 45-minute controlled exam timer
+  });
+
   const createAttempt = useCreateQuizAttempt();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const questions = quiz.questions ?? [];
+
+  // Auto-save answers to localStorage on every keystroke/selection so a WiFi drop or page reload loses nothing
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(answers));
+      setLastSavedAt(format(new Date(), "h:mm:ss a"));
+    } catch {
+      // ignore storage quota errors
+    }
+  }, [answers, storageKey]);
+
+  // Monitor campus WiFi connectivity and notify student calmly on reconnect
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      toast({
+        title: "Connection restored",
+        description: "You are back online. All your saved answers are intact and ready to submit.",
+      });
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [toast]);
+
+  // Exam countdown timer
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setRemainingSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const formatTimer = (secs: number) => {
+    const hrs = Math.floor(secs / 3600);
+    const mins = Math.floor((secs % 3600) / 60);
+    const rem = secs % 60;
+    if (hrs > 0) return `${hrs}h ${String(mins).padStart(2, "0")}m ${String(rem).padStart(2, "0")}s`;
+    return `${String(mins).padStart(2, "0")}:${String(rem).padStart(2, "0")}`;
+  };
 
   const unanswered = questions.filter((q: any) => {
     const a = answers[q.id];
@@ -425,6 +489,14 @@ function StudentQuizForm({ quiz }: { quiz: any }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isOnline) {
+      toast({
+        title: "Waiting for campus WiFi",
+        description: "Your answers are safely saved on this device. Keep this tab open and click Submit once your connection returns.",
+        variant: "destructive",
+      });
+      return;
+    }
     createAttempt.mutate(
       {
         quizId: quiz.id,
@@ -438,18 +510,54 @@ function StudentQuizForm({ quiz }: { quiz: any }) {
       },
       {
         onSuccess: () => {
-          toast({ title: "Quiz submitted", description: "Your answers were turned in." });
+          try { window.localStorage.removeItem(storageKey); } catch { /* ignore */ }
+          toast({ title: "Exam submitted successfully", description: "Your responses have been recorded by the server." });
           queryClient.invalidateQueries({ queryKey: getGetQuizQueryKey(quiz.id) });
           queryClient.invalidateQueries({ queryKey: getListQuizzesQueryKey(quiz.courseId) });
         },
         onError: (err: any) =>
-          toast({ title: "Submission failed", description: err?.message || "Something went wrong.", variant: "destructive" }),
+          toast({
+            title: "Could not reach the exam server yet",
+            description: err?.message
+              ? `${err.message} — Do not close this page; your answers remain saved on your device. Try submitting again in a moment.`
+              : "Your answers are safely saved on your device. Please check your WiFi and press Submit again.",
+            variant: "destructive",
+          }),
       },
     );
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Task 5 Exam Robustness Status Bar: Server Timer + Auto-Save + WiFi Reconnect */}
+      <div className="sticky top-2 z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border bg-card/95 backdrop-blur px-4 py-3 shadow-sm">
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${isOnline ? "bg-success/10 text-success border-success/25" : "bg-warning/15 text-warning border-warning/30"}`}>
+            {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
+            {isOnline ? "Connected to Exam Server" : "Offline — Saving to Device"}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+            {lastSavedAt ? `Auto-saved at ${lastSavedAt}` : "Auto-save active"}
+          </span>
+        </div>
+        <div className={`inline-flex items-center gap-2 font-mono text-sm font-bold px-3 py-1 rounded-lg border ${remainingSeconds < 300 ? "bg-danger/10 text-danger border-danger/30" : "bg-muted/50 text-foreground"}`}>
+          <Clock className="w-4 h-4" />
+          <span>Time Remaining: {formatTimer(remainingSeconds)}</span>
+        </div>
+      </div>
+
+      {!isOnline && (
+        <div role="status" aria-live="polite" className="rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm text-foreground flex items-start gap-3">
+          <WifiOff className="w-5 h-5 text-warning shrink-0 mt-0.5" />
+          <div>
+            <div className="font-semibold">Campus WiFi signal interrupted — keep working calmly</div>
+            <p className="text-muted-foreground text-xs mt-0.5">
+              Every answer you select or type is saved on your phone/laptop automatically. You can keep answering questions; when WiFi reconnects, press Submit Exam.
+            </p>
+          </div>
+        </div>
+      )}
       {questions.map((q: any, i: number) => (
         <Card key={q.id} className="shadow-sm">
           <CardContent className="p-6 space-y-4">

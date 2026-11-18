@@ -248,4 +248,164 @@ router.delete(
   },
 );
 
+// POST /admin/invites/csv — Task 5 structured CSV Bulk Roster Import (up to 2,500 rows)
+const csvRowSchema = z.object({
+  rowNumber: z.number().int().positive(),
+  rollNo: z.string().trim().max(60).optional().nullable(),
+  name: z.string().trim().max(120).optional().nullable(),
+  email: z.string().trim(),
+  role: z.string().trim().optional().default("student"),
+  cohortIds: z.array(z.number().int().positive()).optional().default([]),
+});
+
+const csvBulkSchema = z.object({
+  rows: z.array(csvRowSchema).min(1).max(2500),
+  mode: z.enum(["partial", "atomic"]).optional().default("partial"),
+  onDuplicate: z.enum(["update", "skip"]).optional().default("update"),
+  defaultCohortIds: cohortIdsSchema,
+});
+
+router.post(
+  "/admin/invites/csv",
+  requireAuth,
+  requireAdmin,
+  async (req: Request, res: Response) => {
+    const parsed = csvBulkSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.message });
+      return;
+    }
+
+    const admin = req.localUser!;
+    const { rows, mode, onDuplicate, defaultCohortIds } = parsed.data;
+
+    const seenEmails = new Map<string, number>();
+    const validRows: {
+      rowNumber: number;
+      email: string;
+      name: string | null;
+      role: "student" | "teacher";
+      cohortIds: number[];
+    }[] = [];
+    const duplicates: { rowNumber: number; email: string; firstSeenRow: number }[] = [];
+    const malformed: { rowNumber: number; rawEmail: string; reason: string }[] = [];
+
+    for (const r of rows) {
+      const email = (r.email || "").trim().toLowerCase();
+      const roleNorm = (r.role || "student").trim().toLowerCase();
+      const cleanName = (r.name || "").trim();
+
+      if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        malformed.push({
+          rowNumber: r.rowNumber,
+          rawEmail: r.email || "(empty)",
+          reason: "Invalid or missing email address",
+        });
+        continue;
+      }
+      if (!cleanName) {
+        malformed.push({
+          rowNumber: r.rowNumber,
+          rawEmail: email,
+          reason: "Missing student/faculty full name",
+        });
+        continue;
+      }
+      if (roleNorm !== "student" && roleNorm !== "teacher") {
+        malformed.push({
+          rowNumber: r.rowNumber,
+          rawEmail: email,
+          reason: `Unsupported role "${r.role}" (must be student or teacher)`,
+        });
+        continue;
+      }
+      const prevRow = seenEmails.get(email);
+      if (prevRow !== undefined) {
+        duplicates.push({ rowNumber: r.rowNumber, email, firstSeenRow: prevRow });
+        continue;
+      }
+      seenEmails.set(email, r.rowNumber);
+      const mergedCohorts = Array.from(new Set([...(r.cohortIds ?? []), ...(defaultCohortIds ?? [])]));
+      validRows.push({
+        rowNumber: r.rowNumber,
+        email,
+        name: r.rollNo ? `${cleanName} (${r.rollNo})` : cleanName,
+        role: roleNorm as "student" | "teacher",
+        cohortIds: mergedCohorts,
+      });
+    }
+
+    if (mode === "atomic" && malformed.length > 0) {
+      res.status(422).json({
+        error: `Atomic import aborted: ${malformed.length} malformed row(s) detected. No records were written.`,
+        totalRows: rows.length,
+        created: 0,
+        updated: 0,
+        skipped: 0,
+        duplicates,
+        malformed,
+      });
+      return;
+    }
+
+    let created = 0;
+    let updated = 0;
+    let skipped = 0;
+
+    for (const row of validRows) {
+      if (onDuplicate === "skip") {
+        const [existing] = await db
+          .select({ id: appInvitesTable.id })
+          .from(appInvitesTable)
+          .where(eq(appInvitesTable.email, row.email));
+        if (existing) {
+          skipped += 1;
+          continue;
+        }
+      }
+      const { status, invite } = await upsertInvite(admin, {
+        email: row.email,
+        name: row.name,
+        role: row.role,
+        cohortIds: row.cohortIds,
+      });
+      if (status === "created") created += 1;
+      else updated += 1;
+
+      void sendInviteEmail({
+        email: row.email,
+        name: row.name,
+        inviterName: admin.name,
+        role: row.role,
+        inviteUrl: inviteUrl(invite.token),
+      });
+    }
+
+    void logActivity({
+      user: admin,
+      action: "invite.csv_bulk",
+      message: `CSV roster import: ${created} created, ${updated} updated, ${skipped} skipped, ${duplicates.length} intra-file duplicates, ${malformed.length} malformed`,
+      metadata: {
+        totalRows: rows.length,
+        created,
+        updated,
+        skipped,
+        duplicates: duplicates.length,
+        malformed: malformed.length,
+        mode,
+        onDuplicate,
+      },
+    });
+
+    res.status(201).json({
+      totalRows: rows.length,
+      created,
+      updated,
+      skipped,
+      duplicates,
+      malformed,
+    });
+  },
+);
+
 export default router;
